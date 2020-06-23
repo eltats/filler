@@ -6,21 +6,35 @@
 /*   By: wkraig <wkraig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 16:05:54 by wkraig            #+#    #+#             */
-/*   Updated: 2020/03/13 18:19:01 by wkraig           ###   ########.fr       */
+/*   Updated: 2020/03/13 23:22:48 by wkraig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf/ft_printf.h"
 
-typedef struct	s_map{
-	int			**heatmap;
-	int			height;
-	int			width;
-}				t_map;
+typedef struct		s_map{
+	int				**heatmap;
+	int				height;
+	int				width;
+}					t_map;
 
-typedef struct	s_filler{
-	char		**figure;
-	t_map		*map;
-	int			height;
-	int			width;
-}				t_filler;
+typedef struct		s_token{
+	char			**figure;
+	int				height;
+	int				width;
+}					t_token;
+
+typedef struct		s_players_info{
+	char			enemy;
+	char			player;
+	int				x;
+	int				y;
+}					t_players_info;
+
+typedef struct		s_filler{
+	t_map			*map;
+	t_token			*token;
+	t_players_info	*playa;
+}					t_filler;
+
+void	init_players(t_filler *data, char *line);
