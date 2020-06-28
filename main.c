@@ -6,7 +6,7 @@
 /*   By: wkraig <wkraig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:04:42 by wkraig            #+#    #+#             */
-/*   Updated: 2020/06/23 21:24:57 by wkraig           ###   ########.fr       */
+/*   Updated: 2020/06/28 20:34:50 by wkraig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,74 +14,82 @@
 #include <stdio.h>
 #define FILE fd
 
-int		check_place(t_filler *data, int x, int y)
+int		check_pos(t_filler *data, int x, int y)
 {
-	if (x - data->token->height < 0 || x + data->token->height >= data->map->height)
+	int i, coord_x, coord_y;
+
+	coord_x = 0;
+	i = 0;
+	if (x + data->token->height >= data->map->height || y + data->token->width >= data->map->width)
 		return (0);
-	if (y - data->token->width < 0 || y + data->token->width >= data->map->width)
-		return (0);
-	return (1);
+	coord_x = 0;
+	while (coord_x < data->token->height)
+	{
+		coord_y = 0;
+		while (coord_y < data->token->width)
+		{
+			if (data->map->heatmap[x + coord_x][y + coord_y] == -1 && data->token->figure[coord_x][coord_y] == '*')
+				i++;
+			if (data->map->heatmap[x + coord_x][y + coord_y] == -2 || i > 1)
+				return (0);
+			coord_y++;
+		}
+		coord_x++;
+	}
+	if (i == 1)
+		return (1);
+	return (0);
 }
 
 int		coords_sum(t_filler *data, int x, int y)
 {
 	int		i;
 	int		j;
+	int		coord_x, coord_y;
 	int		sum;
+	int		tmp_y;
 
-	i = 0;
 	sum = 0;
-	while (data->token->figure[i])
+	tmp_y = y;
+	coord_x = 0;
+	while (coord_x < data->token->height)
 	{
-		j = 0;
-		while (data->token->figure[i][j])
+		coord_y = 0;
+		y = tmp_y;
+		while (coord_y < data->token->width)
 		{
-			if (data->token->figure[i][j] == '*')
-				sum += data->map->heatmap[x + i][j + y];
-			j++;
+			if (data->token->figure[coord_x][coord_y] == '*')
+				sum += data->map->heatmap[x][y];
+			coord_y++;
+			y++;
 		}
-		i++;
+		coord_x++;
+		x++;
 	}
 	return (sum);
 }
 
 void	place(t_filler *data)
 {
-	int		x;
-	int		y;
-	int		i;
-	int		j;
-	int		sum;
-	int		min_sum;
+	int		x = 0;
+	int		y = 0;
+	int		i = 0;
+	int		j = 0;
+	int		sum = 100000;
+	int		min_sum = 0;
 
-	min_sum = 2147483647;
-	x = 0;
-	while (data->map->heatmap[x])
+	while (x < data->map->height)
 	{
 		y = 0;
 		while (y < data->map->width)
 		{
-			i = 0;
-			while (data->token->figure[i])
+			if (check_pos(data, x, y))
+				sum = coords_sum(data, x , y);
+			if (sum < min_sum)
 			{
-				j = 0;
-				while (data->token->figure[i][j])
-				{
-					if (!check_place(data, x, y))
-						break ;
-					if (data->map->heatmap[x + i][y + j] == -1)
-					{
-						sum = coords_sum(data, x, y);
-						if (sum < min_sum)
-						{
-							min_sum = sum;
-							data->playa->x = x;
-							data->playa->y = y;
-						}
-					}
-					j++;
-				}
-				i++;
+				data->playa->x = x;
+				data->playa->y = y;
+				min_sum = sum;
 			}
 			y++;
 		}
@@ -133,11 +141,10 @@ void	create_heatmap(t_filler *data)
 		}
 		x++;
 	}
-	// for (int i = 0; data->map->heatmap[i]; i++)
-	// {
-	// 	ft_printf("%2d   ", i);
-	// 	for(int j = 0; j < data->map->width; j++)
+	// for (int i = 0; i < data->map->height; i++){
+	// 	for (int j = 0; j < data->map->width; j++){
 	// 		ft_printf("%3d", data->map->heatmap[i][j]);
+	// 	}
 	// 	ft_printf("\n");
 	// }
 }
@@ -150,12 +157,12 @@ void	get_map(char *line, int FILE, t_filler *data)
 	data->map->height = ft_atoi(ft_strchr(line, ' '));
 	data->map->width = ft_atoi(ft_strchr(ft_strchr(line, ' ') + 1, ' '));
 	data->map->heatmap = (int **)ft_memalloc(sizeof(int *) * (data->map->height + 1));
-	i = 0;
 	get_next_line(FILE, &line);
-	while (i < data->map->height)
+	ft_strdel(&line);
+	i = 0;
+	while (i < data->map->height && (get_next_line(FILE, &line)) > 0)
 	{
 		data->map->heatmap[i] = (int *)ft_memalloc(sizeof(int) * (data->map->width + 1));
-		get_next_line(FILE, &line);
 		j = 0;
 		while (line[j])
 		{
@@ -165,6 +172,8 @@ void	get_map(char *line, int FILE, t_filler *data)
 				data->map->heatmap[i][j - 4] = -1;
 			j++;
 		}
+		if (line)
+			ft_strdel(&line);
 		i++;
 	}
 }
@@ -188,22 +197,40 @@ void	get_token(char *line, int FILE, t_filler *data)
 			data->token->figure[i][j] = line[j];
 			j++;
 		}
+		ft_strdel(&line);
 		i++;
 	}
+	// for (int i = 0; i < data->token->height; i++){
+	// 	for (int j = 0; j < data->token->width; j++){
+	// 		ft_printf("%3c", data->token->figure[i][j]);
+	// 	}
+	// 	ft_printf("\n");
+	// }
 }
 
 int		main(void)
 {
 	char		*line;
 	int			i;
-	// int			FILE = open("test.txt", O_RDWR);
-	int			FILE = 0;
+	int			FILE = open("test.txt", O_RDWR);
+	// int			FILE = 0;
 	t_filler	*data;
 
 	data = (t_filler *)ft_memalloc(sizeof(t_filler));
 	data->map = (t_map *)ft_memalloc(sizeof(t_map));
 	data->token = (t_token *)ft_memalloc(sizeof(t_token));
 	data->playa = (t_players_info *)ft_memalloc(sizeof(t_players_info));
+	data->playa->x = 2;
+	data->playa->y = 3;
+	data->playa->enemy = '\0';
+	data->playa->player = '\0';
+	data->token->height = 0;
+	data->token->width = 0;
+	data->token->figure = NULL;
+	data->map->width = 0;
+	data->map->height = 0;
+	data->map->heatmap = NULL;
+	line = NULL;
 	while (get_next_line(FILE, &line) > 0)
 	{
 		if (line && !ft_strncmp(line, "$$$ exec p1", 11))
@@ -217,14 +244,29 @@ int		main(void)
 		{
 			get_token(line, FILE, data);
 			place(data);
-			// ft_printf("%d %d\n", data->playa->x, data->playa->y);
-			ft_putnbr(5);
+			ft_putnbr(data->playa->x);
 			ft_putchar(' ');
-			ft_putnbr(5);
+			ft_putnbr(data->playa->y);
 			ft_putchar('\n');
-			
+			for (int i = 0; i < data->map->height; i++){
+				free(data->map->heatmap[i]);
+				data->map->heatmap[i] = NULL;
+			}
+			free(data->map->heatmap);
+			data->map->heatmap = NULL;
+			for (int i = 0; i < data->token->height; i++){
+				free(data->token->figure[i]);
+				data->token->figure[i] = NULL;
+			}
+			free(data->token->figure);
+			data->token->figure = NULL;
 		}
+		if (line)
+			ft_strdel(&line);
 	}
-	close(fd);
+	free(data->map);
+	free(data->token);
+	free(data->playa);
+	free(data);
 	return (0);
 }

@@ -3,10 +3,10 @@
 # 42 / filler VM Developped by: Hcao - Abanlin #
 #                                              #
 # -------------------------------------------- #
+launched /Users/Student/filler/a.out
+$$$ exec p1 : [/Users/Student/filler/a.out]
 launched resources/players/abanlin.filler
-$$$ exec p1 : [resources/players/abanlin.filler]
-launched /Users/wkraig/filler/a.out
-$$$ exec p2 : [/Users/wkraig/filler/a.out]
+$$$ exec p2 : [resources/players/abanlin.filler]
 Plateau 15 17:
     01234567890123456
 000 .................
@@ -21,9 +21,9 @@ Plateau 15 17:
 009 .................
 010 .................
 011 .................
-012 ..............XX.
+012 ..............X..
 013 .................
 014 .................
-Piece 2 2:
-**
-.*
+Piece 2 3:
+*..
+**.

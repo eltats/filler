@@ -12,14 +12,21 @@
 
 #include "filler.h"
 
+
+int		ft_abs(int	a)
+{
+	if (a < 0)
+		a *= -1;
+	return (a);
+}
+
+
 void	init_players(t_filler *data, char *line)
 {
 	int		i;
 
-	line = ft_strchr(line, ']');
-	while (*line != '/')
-		line--;
-	if (!ft_strncmp(line, "wkraig", 6))
+	line = ft_strchr(line, '[');
+	if (ft_strstr(line, "a.out") > 0)
 	{
 		data->playa->player = 'O';
 		data->playa->enemy = 'X';
