@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   filler.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkraig <wkraig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cnails <cnails@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/11 16:05:54 by wkraig            #+#    #+#             */
-/*   Updated: 2020/03/13 23:22:48 by wkraig           ###   ########.fr       */
+/*   Updated: 2020/06/28 22:06:35 by cnails           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf/ft_printf.h"
+#include "libft/libft.h"
 
 typedef struct		s_map{
 	int				**heatmap;
@@ -38,3 +38,4 @@ typedef struct		s_filler{
 }					t_filler;
 
 void	init_players(t_filler *data, char *line);
+int		ft_abs(int a);

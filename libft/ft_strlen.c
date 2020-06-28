@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cnails <cnails@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/13 20:39:40 by wkraig            #+#    #+#             */
-/*   Updated: 2020/06/28 22:06:21 by cnails           ###   ########.fr       */
+/*   Created: 2019/09/04 14:48:00 by cnails            #+#    #+#             */
+/*   Updated: 2019/10/12 15:13:33 by cnails           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "filler.h"
+#include "libft.h"
 
-int		ft_abs(int a)
+size_t	ft_strlen(const char *s)
 {
-	return (a < 0 ? -a : a);
-}
+	int i;
 
-void	init_players(t_filler *data, char *line)
-{
-	int		i;
-
-	line = ft_strchr(line, '[');
-	if (ft_strstr(line, "a.out") > 0)
-	{
-		data->playa->player = 'O';
-		data->playa->enemy = 'X';
-	}
-	else
-	{
-		data->playa->player = 'X';
-		data->playa->enemy = 'O';
-	}
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }

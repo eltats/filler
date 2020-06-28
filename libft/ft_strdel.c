@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   ft_strdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cnails <cnails@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/13 20:39:40 by wkraig            #+#    #+#             */
-/*   Updated: 2020/06/28 22:06:21 by cnails           ###   ########.fr       */
+/*   Created: 2019/09/07 12:19:14 by cnails            #+#    #+#             */
+/*   Updated: 2019/10/12 14:37:44 by cnails           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "filler.h"
+#include "libft.h"
 
-int		ft_abs(int a)
+void	ft_strdel(char **as)
 {
-	return (a < 0 ? -a : a);
-}
-
-void	init_players(t_filler *data, char *line)
-{
-	int		i;
-
-	line = ft_strchr(line, '[');
-	if (ft_strstr(line, "a.out") > 0)
+	if (as)
 	{
-		data->playa->player = 'O';
-		data->playa->enemy = 'X';
-	}
-	else
-	{
-		data->playa->player = 'X';
-		data->playa->enemy = 'O';
+		free(*as);
+		*as = NULL;
 	}
 }

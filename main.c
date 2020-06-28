@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkraig <wkraig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cnails <cnails@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:04:42 by wkraig            #+#    #+#             */
-/*   Updated: 2020/06/28 20:34:50 by wkraig           ###   ########.fr       */
+/*   Updated: 2020/06/28 22:40:57 by cnails           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	place(t_filler *data)
 	int		i = 0;
 	int		j = 0;
 	int		sum = 100000;
-	int		min_sum = 0;
+	int		min_sum = 9999;
 
 	while (x < data->map->height)
 	{
@@ -167,9 +167,9 @@ void	get_map(char *line, int FILE, t_filler *data)
 		while (line[j])
 		{
 			if (line[j] == ft_tolower(data->playa->enemy) || line[j] == data->playa->enemy)
-				data->map->heatmap[i][j - 4] = -2;
-			else if (line[j] == ft_tolower(data->playa->player) || line[j] == data->playa->player)
 				data->map->heatmap[i][j - 4] = -1;
+			else if (line[j] == ft_tolower(data->playa->player) || line[j] == data->playa->player)
+				data->map->heatmap[i][j - 4] = -2;
 			j++;
 		}
 		if (line)
@@ -212,8 +212,8 @@ int		main(void)
 {
 	char		*line;
 	int			i;
-	int			FILE = open("test.txt", O_RDWR);
-	// int			FILE = 0;
+	// int			FILE = open("test.txt", O_RDWR);
+	int			FILE = 0;
 	t_filler	*data;
 
 	data = (t_filler *)ft_memalloc(sizeof(t_filler));
